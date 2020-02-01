@@ -53,7 +53,8 @@ function keyboard(value) {
 class Player {
     constructor(texture) {
         this.spr = new PIXI.AnimatedSprite(texture);
-        this.spr.animationSpeed = 15;
+        this.spr.animationSpeed = 0.2;
+        this.spr.play();
         this.spr.anchor.x = 0.5;
         this.spr.anchor.y = 1;
         this.spr.position.x = logicalWidth / 2;
