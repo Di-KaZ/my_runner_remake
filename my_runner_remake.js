@@ -18,7 +18,6 @@ function keyboard(value) {
       }
     };
   
-    //The `upHandler`
     key.upHandler = event => {
       if (event.key === key.value) {
         if (key.isDown && key.release) key.release();
@@ -27,8 +26,6 @@ function keyboard(value) {
         event.preventDefault();
       }
     };
-  
-    //Attach event listeners
     const downListener = key.downHandler.bind(key);
     const upListener = key.upHandler.bind(key);
     
@@ -46,12 +43,12 @@ function keyboard(value) {
     };
     
     return key;
-  }
+}
 
 // Player
 
 class Player {
-    constructor(texture) {
+    constructor(run_texture, jump_texture, fall_texture) {
         this.spr = new PIXI.AnimatedSprite(texture);
         this.spr.animationSpeed = 0.2;
         this.spr.play();
@@ -81,21 +78,6 @@ class Player {
         }
     }
 }
-
-const resizeHandler = () => {
-    const scaleFactor = Math.min(
-      window.innerWidth / logicalWidth,
-      window.innerHeight / logicalHeight
-    );
-    const newWidth = Math.ceil(logicalWidth * scaleFactor);
-    const newHeight = Math.ceil(logicalHeight * scaleFactor);
-    
-    app.renderer.view.style.width = `${newWidth}px`;
-    app.renderer.view.style.height = `${newHeight}px`;
-  
-    app.renderer.resize(newWidth, newHeight);
-    mainContainer.scale.set(scaleFactor); 
-  };
 
 // Parallax manager
 class Plx_layer {
@@ -138,81 +120,91 @@ class Parallax {
     }
 }
 
-//////////////////////
+function init() {
+    // PIXI STUFF
 
+    let mainContainer = new PIXI.Container();
+    PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES , 16);
+    let bump = new Bump(PIXI);
+    let app = new PIXI.Application({width: logicalWidth, height: logicalHeight});
+    PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+    app.renderer.view.id = "pixi-canvas";
+    document.body.appendChild(app.view);
 
-// Main Part //
+    // Handle resize
+    const resizeHandler = () => {
+        const scaleFactor = Math.min(
+            window.innerWidth / logicalWidth,
+            window.innerHeight / logicalHeight);
+            const newWidth = Math.ceil(logicalWidth * scaleFactor);
+            const newHeight = Math.ceil(logicalHeight * scaleFactor);
+            
+            app.renderer.view.style.width = `${newWidth}px`;
+            app.renderer.view.style.height = `${newHeight}px`;
+            
+            app.renderer.resize(newWidth, newHeight);
+            mainContainer.scale.set(scaleFactor); 
+    };
+    resizeHandler();
+    window.addEventListener('resize', resizeHandler, false);
 
-// initialize pixi.js
+    // Texture loading
+    
+    let plx_textures = [];
+    
+    for (i = 1; i < 6; i ++)
+        plx_textures[i] = PIXI.Texture.from("ressources/Parallax/plx-" + i + ".png");
+    
+    let player_text = PIXI.BaseTexture.from("ressources/Character/run.png");
+    
+    let jump_button_text = PIXI.Texture.from("ressources/jump.png");
 
-let mainContainer = new PIXI.Container();
-PIXI.settings.SPRITE_MAX_TEXTURES = Math.min(PIXI.settings.SPRITE_MAX_TEXTURES , 16);
-let bump = new Bump(PIXI);
-let app = new PIXI.Application({width: logicalWidth, height: logicalHeight});
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-app.renderer.view.id = "pixi-canvas";
-document.body.appendChild(app.view);
+    let current_state = playState;
 
-window.addEventListener('resize', resizeHandler, false);
+    let player_text_anim =
+    [
+        new PIXI.Texture(player_text, new PIXI.Rectangle(1 * 21, 0, 21, 33)),
+        new PIXI.Texture(player_text, new PIXI.Rectangle(2 * 21, 0, 21, 33)),
+        new PIXI.Texture(player_text, new PIXI.Rectangle(3 * 21, 0, 21, 33)),
+        new PIXI.Texture(player_text, new PIXI.Rectangle(4 * 21, 0, 21, 33)),
+        new PIXI.Texture(player_text, new PIXI.Rectangle(5 * 21, 0, 21, 33)),
+        new PIXI.Texture(player_text, new PIXI.Rectangle(6 * 21, 0, 21, 33)),
+        new PIXI.Texture(player_text, new PIXI.Rectangle(7 * 21, 0, 21, 33)),
+    ];
+    
+    let plx = new Parallax(plx_textures, 0.5);
+    
+    let player = new Player(player_text_anim);
+    
+    let jump_button = new PIXI.Sprite(jump_button_text);
+    jump_button.interactive = true;
+    
+    jump_button.position.x = 353;
+    jump_button.position.y = 185;
 
-resizeHandler();
-// Texture loading
-
-let plx_textures = [];
-
-for (i = 1; i < 6; i ++)
-    plx_textures[i] = PIXI.Texture.from("ressources/Parallax/plx-" + i + ".png");
-
-let player_text = PIXI.BaseTexture.from("ressources/Character/run.png");
-
-let jump_button_text = PIXI.Texture.from("ressources/jump.png");
-
-let player_text_anim =
-[
-    new PIXI.Texture(player_text, new PIXI.Rectangle(1 * 21, 0, 21, 33)),
-    new PIXI.Texture(player_text, new PIXI.Rectangle(2 * 21, 0, 21, 33)),
-    new PIXI.Texture(player_text, new PIXI.Rectangle(3 * 21, 0, 21, 33)),
-    new PIXI.Texture(player_text, new PIXI.Rectangle(4 * 21, 0, 21, 33)),
-    new PIXI.Texture(player_text, new PIXI.Rectangle(5 * 21, 0, 21, 33)),
-    new PIXI.Texture(player_text, new PIXI.Rectangle(6 * 21, 0, 21, 33)),
-    new PIXI.Texture(player_text, new PIXI.Rectangle(7 * 21, 0, 21, 33)),
-];
-
-console.log(player_text_anim.length);
-let plx = new Parallax(plx_textures, 0.5);
-
-let player = new Player(player_text_anim);
-
-let jump_button = new PIXI.Sprite(jump_button_text);
-jump_button.interactive = true;
-
-jump_button.position.x = 353;
-jump_button.position.y = 185;
-
-let current_state = playState;
-
-let space_key = keyboard("ArrowUp");
-
-jump_button.on('pointerdown', function(e) {
-    player.jump();
-});
-
-space_key.press = ()  => {
-    player.jump();
+    let space_key = keyboard("ArrowUp");
+    
+    jump_button.on('pointerdown', function(e) {
+        player.jump();
+    });
+    
+    space_key.press = ()  => {
+        player.jump();
+    }
+    
+    plx.addToApp(mainContainer);
+    player.addToApp(mainContainer);
+    app.stage.addChild(mainContainer);
+    mainContainer.addChild(jump_button);
+    app.ticker.add(delta => gameLoop(delta));
+    function gameLoop(delta) {
+        current_state(delta);
+    }
+    
+    function playState(delta) {
+        plx.update();
+        player.update();
+    }
 }
 
-plx.addToApp(mainContainer);
-player.addToApp(mainContainer);
-app.stage.addChild(mainContainer);
-mainContainer.addChild(jump_button);
-app.ticker.add(delta => gameLoop(delta));
-
-
-function gameLoop(delta) {
-    current_state(delta);
-}
-
-function playState(delta) {
-    plx.update();
-    player.update();
-}
+init();
