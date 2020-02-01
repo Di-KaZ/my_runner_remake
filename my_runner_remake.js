@@ -52,7 +52,8 @@ function keyboard(value) {
 
 class Player {
     constructor(texture) {
-        this.spr = new PIXI.Sprite(texture);
+        this.spr = new PIXI.AnimatedSprite(texture, true);
+        this.spr.animationSpeed = 15;
         this.spr.anchor.x = 0.5;
         this.spr.anchor.y = 1;
         this.spr.position.x = logicalWidth / 2;
@@ -63,7 +64,7 @@ class Player {
         app.addChild(this.spr);
     }
     update() {
-        this.speedY += 0.5;
+        this.speedY += 0.3;
         this.spr.position.y += this.speedY;
         this.speedY *= 0.9;
         if (this.spr.position.y > logicalHeight) {
@@ -161,13 +162,21 @@ let plx_textures = [];
 for (i = 1; i < 6; i ++)
     plx_textures[i] = PIXI.Texture.from("ressources/Parallax/plx-" + i + ".png");
 
-let player_text = PIXI.Texture.from("ressources/Character/landing.png");
+let player_text = PIXI.BaseTexture.from("ressources/Character/run.png");
 
-
+let player_text_anim =
+[
+    new PIXI.Texture(player_text, new PIXI.Rectangle(1 * 21, 0, 21, 33)),
+    new PIXI.Texture(player_text, new PIXI.Rectangle(2 * 21, 0, 21, 33)),
+    new PIXI.Texture(player_text, new PIXI.Rectangle(3 * 21, 0, 21, 33)),
+    new PIXI.Texture(player_text, new PIXI.Rectangle(4 * 21, 0, 21, 33)),
+    new PIXI.Texture(player_text, new PIXI.Rectangle(5 * 21, 0, 21, 33)),
+    new PIXI.Texture(player_text, new PIXI.Rectangle(6 * 21, 0, 21, 33)),
+    new PIXI.Texture(player_text, new PIXI.Rectangle(7 * 21, 0, 21, 33)),
+];
 let plx = new Parallax(plx_textures, 0.5);
 
-let player = new Player(player_text);
-
+let player = new Player(player_text_anim);
 
 let current_state = playState;
 
