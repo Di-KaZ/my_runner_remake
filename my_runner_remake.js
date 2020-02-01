@@ -52,7 +52,7 @@ function keyboard(value) {
 
 class Player {
     constructor(texture) {
-        this.spr = new PIXI.AnimatedSprite(texture, true);
+        this.spr = new PIXI.AnimatedSprite(texture);
         this.spr.animationSpeed = 15;
         this.spr.anchor.x = 0.5;
         this.spr.anchor.y = 1;
@@ -176,6 +176,8 @@ let player_text_anim =
     new PIXI.Texture(player_text, new PIXI.Rectangle(6 * 21, 0, 21, 33)),
     new PIXI.Texture(player_text, new PIXI.Rectangle(7 * 21, 0, 21, 33)),
 ];
+
+console.log(player_text_anim.length);
 let plx = new Parallax(plx_textures, 0.5);
 
 let player = new Player(player_text_anim);
