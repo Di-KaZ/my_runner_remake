@@ -164,6 +164,8 @@ for (i = 1; i < 6; i ++)
 
 let player_text = PIXI.BaseTexture.from("ressources/Character/run.png");
 
+let jump_button_text = PIXI.Texture.from("ressources/jump.png");
+
 let player_text_anim =
 [
     new PIXI.Texture(player_text, new PIXI.Rectangle(1 * 21, 0, 21, 33)),
@@ -178,9 +180,19 @@ let plx = new Parallax(plx_textures, 0.5);
 
 let player = new Player(player_text_anim);
 
+let jump_button = new PIXI.Sprite(jump_button_text);
+jump_button.interactive = true;
+
+jump_button.position.x = 353;
+jump_button.position.y = 185;
+
 let current_state = playState;
 
 let space_key = keyboard("ArrowUp");
+
+jump_button.on('pointerdown', function(e) {
+    player.jump();
+});
 
 space_key.press = ()  => {
     player.jump();
@@ -189,7 +201,7 @@ space_key.press = ()  => {
 plx.addToApp(mainContainer);
 player.addToApp(mainContainer);
 app.stage.addChild(mainContainer);
-
+mainContainer.addChild(jump_button);
 app.ticker.add(delta => gameLoop(delta));
 
 
