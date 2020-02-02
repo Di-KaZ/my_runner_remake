@@ -9,6 +9,8 @@ class GameLoopScene extends Phaser.Scene {
         this.load.image("layer-3", "ressources/Parallax/plx-4.png");
         this.load.image("layer-4", "ressources/Parallax/plx-5.png");
         this.load.spritesheet("player", "ressources/Character/run.png", {frameWidth: 21, frameHeight: 33});
+        this.load.image("player_land", "ressources/Character/landing.png");
+        this.load.image("player_jump", "ressources/Character/jump.png");
     }
     create() {
         // Parallax
@@ -22,16 +24,17 @@ class GameLoopScene extends Phaser.Scene {
         this.layer_3.setOrigin(0, 0);
         this.layer_4 = this.add.tileSprite(0, 0, 384, 216, "layer-4");
         this.layer_4.setOrigin(0, 0);
+
         // Player
         this.player = this.physics.add.sprite(192, 0, "player");
         this.player.setOrigin(0.5, 0);
         this.anims.create({
-            key: "player_run",
+            key: "player_run_anim",
             frames: this.anims.generateFrameNumbers("player"),
             framerate: 10,
             repeat: -1
         });
-        this.player.play("player_run");
+        this.player.play("player_run_anim");
         this.player.setVelocity(0, 100);
         this.player.setCollideWorldBounds(true);
         this.cursorKeys = this.input.keyboard.createCursorKeys();
@@ -47,7 +50,14 @@ class GameLoopScene extends Phaser.Scene {
         this.layer_2.tilePositionX += 1;
         this.layer_3.tilePositionX += 1.5;
         this.layer_4.tilePositionX += 2;
+
         // player gravity
+        if (this.player.body.velocity.y < 0)
+            this.player.setTexture("player_jump");
+        if (this.player.body.velocity.y > 0 && !this.player.body.onFloor())
+            this.player.setTexture("player_land");
+        if (this.player.body.onFloor() && this.player.anims.currentAnim.key != "player_run_anim")
+            this.player.play("player_run_anim");
         this.player.body.velocity.y += 10;
         this.movePlayerManager();
     }
