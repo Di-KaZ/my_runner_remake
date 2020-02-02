@@ -7,6 +7,10 @@ let test_map =
     "1111111111",
 ];
 
+let tab_align = [ 60, 90, 120, 140, 170 ];
+
+let last = null;
+
 class GameLoopScene extends Phaser.Scene {
     constructor() {
         super("GameLoopScene");
@@ -55,8 +59,10 @@ class GameLoopScene extends Phaser.Scene {
             
         });
         this.player = new Player(this, 384 / 3, 215);
+        // Map Handler
+        this.map_y = 0;
+        this.addColumnMap();
         // Score
-        this.map_handler = new MapHandler(this, test_map);
         this.score = 0;
         this.score_display = this.add.bitmapText(10, 5, "pixelFont", "SCORE", 16);
     }
@@ -72,16 +78,34 @@ class GameLoopScene extends Phaser.Scene {
         this.player_grp.getChildren().forEach(elem => elem.update());
 
         // Manage map
+        if (last.x + last.width <= 384)
+            this.addColumnMap();
         this.map_grp.getChildren().forEach(elem => elem.update());
 
         //Update score
         this.score_display.text = "SCORE " + this.paddScore(this.score, 6);
-        this.map_handler.update();
     }
     paddScore(number, size) {
         let string_num = String(number);
         while(string_num.length < (size || 2))
             string_num = "0" + string_num;
         return string_num;
+    }
+    addColumnMap() {
+        if (this.map_y > test_map[0].length)
+            return;
+        console.log(this.map_y);
+        for (var i = 0; i < tab_align.length; i ++) {
+            last = new MapTile(this, 384, tab_align[i], this.getTileType(test_map[i][this.map_y]));
+            this.map_grp.add(last);
+        }
+        console.log(last);
+        this.map_y += 1;
+    }
+    getTileType(char) {
+        if (char === "1")
+            return "grass";
+        if (char === "2")
+            return "lava";
     }
 }

@@ -14,6 +14,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.cursorKeys = scene.input.keyboard.createCursorKeys();
         this.pointer = scene.input.activePointer;
         this.help_text = scene.help_text;
+        this.body.immovable = true;
     }
     update(time, delta) {
         if (this.body.velocity.y < 0)
@@ -27,7 +28,7 @@ class Player extends Phaser.GameObjects.Sprite {
     }
     movePlayerManager() {
         if ((Phaser.Input.Keyboard.JustDown(this.spacebar) || this.cursorKeys.up.isDown || this.pointer.isDown) && this.body.onFloor()) {
-            this.body.setVelocityY(-200);
+            this.body.setVelocityY(-250);
             this.jump_sound.play();
             this.help_text.visible = false;
         }
