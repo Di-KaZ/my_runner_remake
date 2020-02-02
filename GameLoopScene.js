@@ -29,6 +29,8 @@ class GameLoopScene extends Phaser.Scene {
         this.layer_5 = this.add.tileSprite(0, 0, 384, 216, "layer-5");
         this.layer_5.setOrigin(0, 0);
         this.jump_sound = this.sound.add("jump");
+        this.help_text = this.add.bitmapText(384 / 2, 216 / 1.5, "pixelFont", "PRESS UP/SPACE OR CLICK ANYWHERE TO JUMP", 16);
+        this.help_text.setOrigin(0.5, 0.5);
 
         // Player
         this.anims.create({
