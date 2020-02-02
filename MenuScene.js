@@ -35,7 +35,7 @@ class MenuScene extends Phaser.Scene {
         this.play_text = this.add.bitmapText(45, 195, "pixelFont", "PLAY", 30);
         this.play_text.tint = 0xD3D3D3;
     }
-    update() {
+    update(time, delta) {
         this.logo_scale_factor += this.logo_scale_mul;
         if (this.logo_scale_factor > 1.1)
             this.logo_scale_mul = -0.005;

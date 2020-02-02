@@ -12,6 +12,7 @@ class GameLoopScene extends Phaser.Scene {
         this.load.spritesheet("player", "ressources/Character/run.png", {frameWidth: 21, frameHeight: 33});
         this.load.image("player_land", "ressources/Character/landing.png");
         this.load.image("player_jump", "ressources/Character/jump.png");
+        this.load.audio("jump", ["ressources/jump.ogg"]);
     }
     create() {
         // Parallax
@@ -27,6 +28,7 @@ class GameLoopScene extends Phaser.Scene {
         this.layer_4.setOrigin(0, 0);
         this.layer_5 = this.add.tileSprite(0, 0, 384, 216, "layer-5");
         this.layer_5.setOrigin(0, 0);
+        this.jump_sound = this.sound.add("jump");
 
         // Player
         this.anims.create({
@@ -46,7 +48,7 @@ class GameLoopScene extends Phaser.Scene {
         this.score = 0;
         this.score_display = this.add.bitmapText(10, 5, "pixelFont", "SCORE", 16);
     }
-    update() {
+    update(time, delta) {
         // move parallax
         this.layer_1.tilePositionX += 0.2;
         this.layer_2.tilePositionX += 0.5;
