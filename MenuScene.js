@@ -8,7 +8,7 @@ class MenuScene extends Phaser.Scene {
         this.load.image("bg_on", "ressources/bg_on.png");
         this.load.image("bg_off", "ressources/bg_off.png");
         this.load.image("logo", "ressources/logo.png");
-        this.load.audio("music", ["ressources/soundtrack.ogg"]);
+        this.load.audio("music", "ressources/soundtrack.ogg", {volume: 0.5});
     }
     create() {
         this.music = this.sound.add("music");
