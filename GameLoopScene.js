@@ -37,7 +37,14 @@ class GameLoopScene extends Phaser.Scene {
         });
         this.player_grp = this.add.group("player_grp");
         this.map_grp = this.add.group("map_group");
+        this.physics.add.collider(this.player_grp, this.map_grp, function(player, map_tile ) {
+
+        });
         this.player = new Player(this, 384 / 3, 215);
+
+        // Score
+        this.score = 0;
+        this.score_display = this.add.bitmapText(10, 5, "pixelFont", "SCORE", 16);
     }
     update() {
         // move parallax
@@ -52,5 +59,14 @@ class GameLoopScene extends Phaser.Scene {
 
         // Manage map
         this.map_grp.getChildren().forEach(elem => elem.update());
+
+        //Update score
+        this.score_display.text = "SCORE " + this.paddScore(this.score, 6);
+    }
+    paddScore(number, size) {
+        let string_num = String(number);
+        while(string_num.length < (size || 2))
+            string_num = "0" + string_num;
+        return string_num;
     }
 }
