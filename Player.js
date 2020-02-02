@@ -12,6 +12,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.body.setVelocityY(100);
         this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.cursorKeys = scene.input.keyboard.createCursorKeys();
+        this.pointer = scene.input.activePointer;
     }
     update(time, delta) {
         if (this.body.velocity.y < 0)
@@ -24,7 +25,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.movePlayerManager();
     }
     movePlayerManager() {
-        if ((Phaser.Input.Keyboard.JustDown(this.spacebar) || this.cursorKeys.up.isDown) && this.body.onFloor()) {
+        if ((Phaser.Input.Keyboard.JustDown(this.spacebar) || this.cursorKeys.up.isDown || this.pointer.isDown) && this.body.onFloor()) {
             this.body.setVelocityY(-200);
             this.jump_sound.play();
         }
