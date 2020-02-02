@@ -1,3 +1,12 @@
+let test_map =
+[
+    "1111121111",
+    "1111111111",
+    "2111111111",
+    "1111121111",
+    "1111111111",
+];
+
 class GameLoopScene extends Phaser.Scene {
     constructor() {
         super("GameLoopScene");
@@ -12,6 +21,8 @@ class GameLoopScene extends Phaser.Scene {
         this.load.spritesheet("player", "ressources/Character/run.png", {frameWidth: 21, frameHeight: 33});
         this.load.image("player_land", "ressources/Character/landing.png");
         this.load.image("player_jump", "ressources/Character/jump.png");
+        this.load.image("grass", "ressources/plateforme1.png");
+        this.load.image("lava", "ressources/lava.png");
         this.load.audio("jump", ["ressources/jump.ogg"]);
     }
     create() {
@@ -31,7 +42,6 @@ class GameLoopScene extends Phaser.Scene {
         this.jump_sound = this.sound.add("jump");
         this.help_text = this.add.bitmapText(384 / 2, 216 / 1.5, "pixelFont", "PRESS UP/SPACE OR CLICK ANYWHERE TO JUMP", 16);
         this.help_text.setOrigin(0.5, 0.5);
-
         // Player
         this.anims.create({
             key: "player_run_anim",
@@ -42,11 +52,11 @@ class GameLoopScene extends Phaser.Scene {
         this.player_grp = this.add.group("player_grp");
         this.map_grp = this.add.group("map_group");
         this.physics.add.collider(this.player_grp, this.map_grp, function(player, map_tile) {
-
+            
         });
         this.player = new Player(this, 384 / 3, 215);
-
         // Score
+        this.map_handler = new MapHandler(this, test_map);
         this.score = 0;
         this.score_display = this.add.bitmapText(10, 5, "pixelFont", "SCORE", 16);
     }
@@ -66,6 +76,7 @@ class GameLoopScene extends Phaser.Scene {
 
         //Update score
         this.score_display.text = "SCORE " + this.paddScore(this.score, 6);
+        this.map_handler.update();
     }
     paddScore(number, size) {
         let string_num = String(number);
