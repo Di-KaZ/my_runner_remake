@@ -6,6 +6,7 @@ class Player extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
         this.body.setCollideWorldBounds(true);
+        this.body.setBoundsRectangle(new Phaser.Geom.Rectangle(0, 0, 384, 190));
         scene.player_grp.add(this);
         this.body.setVelocityY(100);
         this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
