@@ -3,11 +3,9 @@ let test_map =
     "1111121111",
     "1111111111",
     "2111111111",
-    "1111121111",
-    "1111111111",
 ];
 
-let tab_align = [ 60, 90, 120, 140, 170 ];
+let tab_align = [ 30, 90, 150];
 
 let last = null;
 
@@ -56,9 +54,9 @@ class GameLoopScene extends Phaser.Scene {
         this.player_grp = this.add.group("player_grp");
         this.map_grp = this.add.group("map_group");
         this.physics.add.collider(this.player_grp, this.map_grp, function(player, map_tile) {
-            
-        });
-        this.player = new Player(this, 384 / 3, 215);
+            player.body.x -= map_tile.body.x - map_tile.body.prev.x;
+        }, null, this);
+        this.player = new Player(this, 384 / 3, 0);
         // Map Handler
         this.map_y = 0;
         this.addColumnMap();
@@ -78,7 +76,7 @@ class GameLoopScene extends Phaser.Scene {
         this.player_grp.getChildren().forEach(elem => elem.update());
 
         // Manage map
-        if (last.x + last.width <= 384)
+        if (last.x + last.width - 5 <= 384)
             this.addColumnMap();
         this.map_grp.getChildren().forEach(elem => elem.update());
 
@@ -94,12 +92,10 @@ class GameLoopScene extends Phaser.Scene {
     addColumnMap() {
         if (this.map_y > test_map[0].length)
             return;
-        console.log(this.map_y);
         for (var i = 0; i < tab_align.length; i ++) {
             last = new MapTile(this, 384, tab_align[i], this.getTileType(test_map[i][this.map_y]));
             this.map_grp.add(last);
         }
-        console.log(last);
         this.map_y += 1;
     }
     getTileType(char) {

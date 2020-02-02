@@ -9,27 +9,28 @@ class Player extends Phaser.GameObjects.Sprite {
         this.body.setCollideWorldBounds(true);
         this.body.setBoundsRectangle(new Phaser.Geom.Rectangle(0, 0, 384, 190));
         scene.player_grp.add(this);
-        this.body.setVelocityY(100);
+        this.body.setGravityY(500);
         this.spacebar = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.cursorKeys = scene.input.keyboard.createCursorKeys();
         this.pointer = scene.input.activePointer;
         this.help_text = scene.help_text;
-        this.body.immovable = true;
+        this.body.checkCollision.up = false;
+        this.body.checkCollision.left = false;
+        this.body.checkCollision.right = false;
     }
     update(time, delta) {
         if (this.body.velocity.y < 0)
             this.setTexture("player_jump");
         if (this.body.velocity.y > 0 && !this.body.onFloor())
             this.setTexture("player_land");
-        if (this.body.onFloor() && this.anims.currentAnim.key != "player_run_anim")
+        if ((this.body.onFloor() || this.body.touching.down) && this.anims.currentAnim.key != "player_run_anim")
             this.play("player_run_anim");
-        this.body.velocity.y += 10;
         this.movePlayerManager();
     }
     movePlayerManager() {
-        if ((Phaser.Input.Keyboard.JustDown(this.spacebar) || this.cursorKeys.up.isDown || this.pointer.isDown) && this.body.onFloor()) {
-            this.body.setVelocityY(-250);
+        if ((Phaser.Input.Keyboard.JustDown(this.spacebar) || this.cursorKeys.up.isDown || this.pointer.isDown) && (this.body.touching.down || this.body.onFloor())) {
             this.jump_sound.play();
+            this.body.setVelocityY(-250);
             this.help_text.visible = false;
         }
     }
