@@ -47,6 +47,7 @@ class GameLoopScene extends Phaser.Scene {
         this.layer_2.tilePositionX += 1;
         this.layer_3.tilePositionX += 1.5;
         this.layer_4.tilePositionX += 2;
+        // player gravity
         this.player.body.velocity.y += 10;
         this.movePlayerManager();
     }

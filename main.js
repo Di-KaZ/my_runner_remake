@@ -12,6 +12,7 @@ var game_config = {
     },
     scale: {
         mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
         antialias: false
     },
     autoRound: false,
