@@ -17,6 +17,14 @@ class Player extends Phaser.GameObjects.Sprite {
         this.body.checkCollision.up = false;
         this.body.checkCollision.left = false;
         this.body.checkCollision.right = false;
+        scene.player_tween = scene.tweens.add({
+            targets: this,
+            alpha: 0,
+            ease: 'cubic.easeOut',
+            duration: 100,
+            repeat: 2,
+            yoyo: true
+        });
     }
     update(time, delta) {
         if (this.body.velocity.y < 0)

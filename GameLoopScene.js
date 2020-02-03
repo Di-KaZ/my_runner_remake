@@ -61,6 +61,7 @@ class GameLoopScene extends Phaser.Scene {
             if (!player.body.onFloor())
                 player.body.x -= map_tile.body.x - map_tile.body.prev.x;
             if (map_tile.texture.key === "lava") {
+                this.player_tween.play();
                 this.hurt_sound.play();
                 this.score -= 300;
                 if (this.score < 0)
