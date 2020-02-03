@@ -1,6 +1,7 @@
 class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, "player");
+        this.scene = scene;
         this.play("player_run_anim");
         this.setOrigin(0.5, 0);
         this.jump_sound = scene.jump_sound;
@@ -40,6 +41,15 @@ class Player extends Phaser.GameObjects.Sprite {
             this.jump_sound.play();
             this.body.setVelocityY(-250);
             this.help_text.visible = false;
+        }
+        if (this.cursorKeys.down.isDown && !this.body.onFloor()) {
+            this.body.checkCollision.none = true;
+            this.drop_timer = this.scene.time.delayedCall(
+                    200,
+                    () => {this.body.checkCollision.none = false;},
+                    [],
+                    this
+            );
         }
     }
 }
