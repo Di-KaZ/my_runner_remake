@@ -6,6 +6,9 @@ class MapTile extends Phaser.GameObjects.Sprite {
         scene.physics.world.enableBody(this);
         scene.map_grp.add(this);
         this.body.setVelocityX(-100);
+        this.body.checkCollision.down = false;
+        this.body.checkCollision.left = false;
+        this.body.checkCollision.right = false;
         this.body.immovable = true;
     }
     update(time, delta) {

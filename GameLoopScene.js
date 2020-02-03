@@ -54,7 +54,8 @@ class GameLoopScene extends Phaser.Scene {
         this.player_grp = this.add.group("player_grp");
         this.map_grp = this.add.group("map_group");
         this.physics.add.collider(this.player_grp, this.map_grp, function(player, map_tile) {
-            player.body.x -= map_tile.body.x - map_tile.body.prev.x;
+            if (!player.body.onFloor())
+                player.body.x -= map_tile.body.x - map_tile.body.prev.x;
         }, null, this);
         this.player = new Player(this, 384 / 3, 0);
         // Map Handler
