@@ -1,8 +1,8 @@
 let test_map =
 [
-    "0111121111",
-    "0101111111",
-    "0011111111",
+    "111111111111111211111111111111111011111111111111111111111111111111111111111111111111111111112111111111111111111111111121111111111111111111111111111111",
+    "111111111112111111111111111111112111111111111111111111111111111111111111111111111112111111111111111111111111111111111121111111111111111111111111111111",
+    "000000000011111111111111111111111111011111111111211111111111111111111111111111111111111111111111111111111111111111111112111111111111111111111111111111"
 ];
 
 let tab_align = [ 30, 90, 150];
@@ -26,7 +26,8 @@ class GameLoopScene extends Phaser.Scene {
         this.load.image("grass", "ressources/plateforme1.png");
         this.load.image("void", "ressources/plateforme1.png");
         this.load.image("lava", "ressources/lava.png");
-        this.load.audio("jump", ["ressources/jump.ogg"]);
+        this.load.audio("jump", "ressources/jump.ogg");
+        this.load.audio("hurt", "ressources/damage.ogg");
     }
     create() {
         // Parallax
@@ -43,6 +44,7 @@ class GameLoopScene extends Phaser.Scene {
         this.layer_5 = this.add.tileSprite(0, 0, 384, 216, "layer-5");
         this.layer_5.setOrigin(0, 0);
         this.jump_sound = this.sound.add("jump");
+        this.hurt_sound = this.sound.add("hurt");
         this.help_text = this.add.bitmapText(384 / 2, 216 / 1.5, "pixelFont", "PRESS UP/SPACE OR CLICK ANYWHERE TO JUMP", 16);
         this.help_text.setOrigin(0.5, 0.5);
         this.physics.world.checkCollision.up = false;
@@ -58,8 +60,14 @@ class GameLoopScene extends Phaser.Scene {
         this.physics.add.collider(this.player_grp, this.map_grp, function(player, map_tile) {
             if (!player.body.onFloor())
                 player.body.x -= map_tile.body.x - map_tile.body.prev.x;
+            if (map_tile.texture.key === "lava") {
+                this.hurt_sound.play();
+                this.score -= 300;
+                if (this.score < 0)
+                    this.score = 0;
+            }
         }, null, this);
-        this.player = new Player(this, 384 / 3, 0);
+        this.player = new Player(this, 384 / 3, 215);
         // Map Handler
         this.map_y = 0;
         this.addColumnMap();
@@ -77,13 +85,14 @@ class GameLoopScene extends Phaser.Scene {
         
         // Manage player
         this.player_grp.getChildren().forEach(elem => elem.update());
-
+        
         // Manage map
         if (last.x + last.width - 3 <= 384)
-            this.addColumnMap();
+        this.addColumnMap();
         this.map_grp.getChildren().forEach(elem => elem.update());
-
+        
         //Update score
+        this.score += 1;
         this.score_display.text = "SCORE " + this.paddScore(this.score, 6);
     }
     paddScore(number, size) {

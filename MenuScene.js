@@ -34,6 +34,23 @@ class MenuScene extends Phaser.Scene {
         });
         this.play_text = this.add.bitmapText(45, 195, "pixelFont", "PLAY", 30);
         this.play_text.tint = 0xD3D3D3;
+        this.logo_tween = this.tweens.add({
+            targets: this.logo,
+            y: this.logo.y,
+            x: this.logo.x,
+            ease: 'Power1',
+            duration: 3000,
+            reapeat: 0,
+            alpha: {
+                getStart: () => 0,
+                getEnd: () => 1
+            },
+            rotation: {
+                getStart: () => 0,
+                getEnd: () => 18.5
+            },
+            callbackScope: this
+        });
     }
     update(time, delta) {
         this.logo_scale_factor += this.logo_scale_mul;
