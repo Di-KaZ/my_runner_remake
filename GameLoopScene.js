@@ -2,7 +2,7 @@ let test_map =
 [
     "111111111111111211111111111111111011111111111111111111111111111111111111111111111111111111112111111111111111111111111121111111111111111111111111111111",
     "111111111112111111111111111111112111111111111111111111111111111111111111111111111112111111111111111111111111111111111121111111111111111111111111111111",
-    "000000000011111111111111111111111111011111111111211111111111111111111111111111111111111111111111111111111111111111111112111111111111111111111111111111"
+    "333333333311111111111111111111111111011111111111211111111111111111111111111111111111111111111111111111111111111111111112111111111111111111111111111111"
 ];
 
 let tab_align = [ 30, 90, 150];
@@ -23,11 +23,13 @@ class GameLoopScene extends Phaser.Scene {
         this.load.spritesheet("player", "ressources/Character/run.png", {frameWidth: 21, frameHeight: 33});
         this.load.image("player_land", "ressources/Character/landing.png");
         this.load.image("player_jump", "ressources/Character/jump.png");
+        this.load.image("jumper", "ressources/jumper.png");
         this.load.image("grass", "ressources/plateforme1.png");
         this.load.image("void", "ressources/plateforme1.png");
         this.load.image("lava", "ressources/lava.png");
         this.load.audio("jump", "ressources/jump.ogg");
         this.load.audio("hurt", "ressources/damage.ogg");
+        this.load.audio("jumper_sound", "ressources/jumper.ogg");
     }
     create() {
         // Parallax
@@ -45,6 +47,7 @@ class GameLoopScene extends Phaser.Scene {
         this.layer_5.setOrigin(0, 0);
         this.jump_sound = this.sound.add("jump");
         this.hurt_sound = this.sound.add("hurt");
+        this.jumper_sound = this.sound.add("jumper_sound");
         this.help_text = this.add.bitmapText(384 / 2, 216 / 1.5, "pixelFont", "PRESS UP/SPACE OR CLICK ANYWHERE TO JUMP", 16);
         this.help_text.setOrigin(0.5, 0.5);
         this.physics.world.checkCollision.up = false;
@@ -66,6 +69,10 @@ class GameLoopScene extends Phaser.Scene {
                 this.score -= 300;
                 if (this.score < 0)
                     this.score = 0;
+            }
+            if (map_tile.texture.key === "jumper") {
+                this.jumper_sound.play();
+                player.body.setVelocityY(-350);
             }
         }, null, this);
         this.player = new Player(this, 384 / 3, 215);
@@ -118,5 +125,7 @@ class GameLoopScene extends Phaser.Scene {
             return "grass";
         if (char === "2")
             return "lava";
+        if (char === "3")
+            return "jumper";
     }
 }
