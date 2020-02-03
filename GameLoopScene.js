@@ -64,13 +64,14 @@ class GameLoopScene extends Phaser.Scene {
             if (!player.body.onFloor())
                 player.body.x -= map_tile.body.x - map_tile.body.prev.x;
             if (map_tile.texture.key === "lava") {
+                map_tile.body.checkCollision.none = true;
                 this.player_tween.play();
                 this.hurt_sound.play();
                 this.score -= 300;
                 if (this.score < 0)
                     this.score = 0;
             }
-            if (map_tile.texture.key === "jumper") {
+            if (map_tile.texture.key === "jumper" && player.body.touching.down) {
                 this.jumper_sound.play();
                 player.body.setVelocityY(-350);
             }
