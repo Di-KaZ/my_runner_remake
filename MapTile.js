@@ -10,9 +10,16 @@ class MapTile extends Phaser.GameObjects.Sprite {
         this.body.checkCollision.left = false;
         this.body.checkCollision.right = false;
         this.body.immovable = true;
+        if (type === "void") {
+            this.body.checkCollision.up = false;
+            this.body.checkCollision.left = false;
+            this.body.checkCollision.right = false;
+            this.body.checkCollision.down = false;
+            this.setVisible(false);
+        }
     }
     update(time, delta) {
-        if (this.x < 0)
+        if (this.x + this.width < 0)
             this.destroy();
     }
 }

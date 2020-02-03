@@ -1,8 +1,8 @@
 let test_map =
 [
-    "1111121111",
-    "1111111111",
-    "2111111111",
+    "0111121111",
+    "0101111111",
+    "0011111111",
 ];
 
 let tab_align = [ 30, 90, 150];
@@ -24,6 +24,7 @@ class GameLoopScene extends Phaser.Scene {
         this.load.image("player_land", "ressources/Character/landing.png");
         this.load.image("player_jump", "ressources/Character/jump.png");
         this.load.image("grass", "ressources/plateforme1.png");
+        this.load.image("void", "ressources/plateforme1.png");
         this.load.image("lava", "ressources/lava.png");
         this.load.audio("jump", ["ressources/jump.ogg"]);
     }
@@ -77,7 +78,7 @@ class GameLoopScene extends Phaser.Scene {
         this.player_grp.getChildren().forEach(elem => elem.update());
 
         // Manage map
-        if (last.x + last.width - 5 <= 384)
+        if (last.x + last.width - 3 <= 384)
             this.addColumnMap();
         this.map_grp.getChildren().forEach(elem => elem.update());
 
@@ -100,6 +101,8 @@ class GameLoopScene extends Phaser.Scene {
         this.map_y += 1;
     }
     getTileType(char) {
+        if (char === "0")
+            return "void";
         if (char === "1")
             return "grass";
         if (char === "2")
