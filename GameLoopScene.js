@@ -30,6 +30,7 @@ class GameLoopScene extends Phaser.Scene {
         this.load.audio("jump", "ressources/jump.ogg");
         this.load.audio("hurt", "ressources/damage.ogg");
         this.load.audio("jumper_sound", "ressources/jumper.ogg");
+        this.load.image("heart", "ressources/heart.png");
     }
     create() {
         // Parallax
