@@ -6,7 +6,7 @@ class MenuScene extends Phaser.Scene {
         var loadingText = this.add.text(379, 211, "Loading (0%)", 15);
         loadingText.setOrigin(1, 1);
         this.load.on('progress', function (value) {
-            loadingText.setText("Loading (" + Math.floor(value) * 100 + "%)");
+            loadingText.setText("Loading (" + Math.ceil(value) * 100 + "%)");
             console.log(value);
         });
         
