@@ -62,7 +62,7 @@ class MenuScene extends Phaser.Scene {
         // this.music.play();
         this.background = this.add.image(0, 0, "background");
         this.background.setOrigin(0, 0);
-        this.idle_player = this.add.sprite(300, 216 / 2, "player_idle");
+        this.idle_player = this.add.sprite(400, 216 / 2, "player_idle");
         this.idle_player.setScale(6);
         this.idle_player.play("player_idle_anim");
         this.play_bg = this.add.sprite(0, 190, "bg_off");
@@ -100,6 +100,18 @@ class MenuScene extends Phaser.Scene {
             rotation: {
                 getStart: () => 0,
                 getEnd: () => 18.5
+            },
+            callbackScope: this
+        });
+        this.idle_depl = this.tweens.add({
+            targets: this.idle_player,
+            x: this.idle_player.x - 100,
+            ease: 'Power1',
+            duration: 3000,
+            reapeat: 0,
+            alpha: {
+                getStart: () => 0,
+                getEnd: () => 1
             },
             callbackScope: this
         });
