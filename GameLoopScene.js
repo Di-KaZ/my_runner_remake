@@ -14,23 +14,6 @@ class GameLoopScene extends Phaser.Scene {
         super("GameLoopScene");
     }
     preload() {
-        this.load.image("layer-0", "ressources/Parallax/plx-1.png");
-        this.load.image("layer-1", "ressources/Parallax/plx-2.png");
-        this.load.image("layer-2", "ressources/Parallax/plx-3.png");
-        this.load.image("layer-3", "ressources/Parallax/plx-4.png");
-        this.load.image("layer-4", "ressources/Parallax/plx-5.png");
-        this.load.image("layer-5", "ressources/Parallax/plx-6.png");
-        this.load.spritesheet("player", "ressources/Character/run.png", {frameWidth: 21, frameHeight: 33});
-        this.load.image("player_land", "ressources/Character/landing.png");
-        this.load.image("player_jump", "ressources/Character/jump.png");
-        this.load.image("jumper", "ressources/jumper.png");
-        this.load.image("grass", "ressources/plateforme1.png");
-        this.load.image("void", "ressources/plateforme1.png");
-        this.load.image("lava", "ressources/lava.png");
-        this.load.audio("jump", "ressources/jump.ogg");
-        this.load.audio("hurt", "ressources/damage.ogg");
-        this.load.audio("jumper_sound", "ressources/jumper.ogg");
-        this.load.image("heart", "ressources/heart.png");
     }
     create() {
         // Parallax
@@ -71,6 +54,7 @@ class GameLoopScene extends Phaser.Scene {
                 this.score -= 300;
                 if (this.score < 0)
                     this.score = 0;
+                this.scene.start("DeadScene");            
             }
             if (map_tile.texture.key === "jumper" && player.body.touching.down) {
                 this.jumper_sound.play();

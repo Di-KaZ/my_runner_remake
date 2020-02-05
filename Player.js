@@ -43,6 +43,7 @@ class Player extends Phaser.GameObjects.Sprite {
             this.help_text.visible = false;
         }
         if (this.cursorKeys.down.isDown && !this.body.onFloor()) {
+            this.jump_sound.play();
             this.body.checkCollision.none = true;
             this.drop_timer = this.scene.time.delayedCall(
                     150,
