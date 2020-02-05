@@ -33,6 +33,7 @@ class MenuScene extends Phaser.Scene {
         this.load.image("layer-4", "ressources/Parallax/plx-5.png");
         this.load.image("layer-5", "ressources/Parallax/plx-6.png");
         this.load.spritesheet("player", "ressources/Character/run.png", {frameWidth: 21, frameHeight: 33});
+        this.load.spritesheet("player_idle", "ressources/Character/idle.png", {frameWidth: 19, frameHeight: 34});
         this.load.image("player_land", "ressources/Character/landing.png");
         this.load.image("player_jump", "ressources/Character/jump.png");
         this.load.image("jumper", "ressources/jumper.png");
@@ -42,19 +43,28 @@ class MenuScene extends Phaser.Scene {
         this.load.audio("jump", "ressources/jump.ogg");
         this.load.audio("hurt", "ressources/damage.ogg");
         this.load.audio("jumper_sound", "ressources/jumper.ogg");
-        this.load.image("background", "ressources/bg_base.png");
+        this.load.image("background", "ressources/bg_base.jpg");
         this.load.image("bg_on", "ressources/bg_on.png");
         this.load.image("bg_off", "ressources/bg_off.png");
         this.load.image("logo", "ressources/logo.png");
         this.load.audio("music", "ressources/soundtrack.ogg", {volume: 0.5});
     }
     create() {
+        this.anims.create({
+            key: "player_idle_anim",
+            frames: this.anims.generateFrameNumbers("player_idle"),
+            frameRate: 8,
+            repeat: -1
+        });
         this.music = this.sound.add("music");
         this.menu_on = this.sound.add("menu_on");
         this.menu_off = this.sound.add("menu_off");
-        this.music.play();
+        // this.music.play();
         this.background = this.add.image(0, 0, "background");
         this.background.setOrigin(0, 0);
+        this.idle_player = this.add.sprite(300, 216 / 2, "player_idle");
+        this.idle_player.setScale(6);
+        this.idle_player.play("player_idle_anim");
         this.play_bg = this.add.sprite(0, 190, "bg_off");
         this.play_bg.setOrigin(0, 0);
         this.play_bg.setInteractive();
@@ -97,9 +107,9 @@ class MenuScene extends Phaser.Scene {
     update(time, delta) {
         this.logo_scale_factor += this.logo_scale_mul;
         if (this.logo_scale_factor > 1.1)
-            this.logo_scale_mul = -0.005;
+        this.logo_scale_mul = -0.005;
         if (this.logo_scale_factor < 0.9)
-            this.logo_scale_mul = 0.005;
+        this.logo_scale_mul = 0.005;
         this.logo.setScale(this.logo_scale_factor);
     }
 }
