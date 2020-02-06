@@ -50,11 +50,11 @@ class GameLoopScene extends Phaser.Scene {
             if (map_tile.texture.key === "lava") {
                 map_tile.body.checkCollision.none = true;
                 this.player_tween.play();
+                this.player.life -= 1;
                 this.hurt_sound.play();
                 this.score -= 300;
                 if (this.score < 0)
                     this.score = 0;
-                this.scene.start("DeadScene");            
             }
             if (map_tile.texture.key === "jumper" && player.body.touching.down) {
                 this.jumper_sound.play();
@@ -79,6 +79,9 @@ class GameLoopScene extends Phaser.Scene {
         
         // Manage player
         this.player_grp.getChildren().forEach(elem => elem.update());
+        if (!this.player.isAlive()) {
+            this.scene.start("DeadScene");
+        }
         
         // Manage map
         if (last.x + last.width - 3 <= 384)

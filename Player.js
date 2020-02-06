@@ -4,7 +4,9 @@ class Player extends Phaser.GameObjects.Sprite {
         this.scene = scene;
         this.play("player_run_anim");
         this.setOrigin(0.5, 0);
+        this.life = 3;
         this.jump_sound = scene.jump_sound;
+        this.fklow_sound = scene.sound.add("fklow");
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
         this.body.setCollideWorldBounds(true);
@@ -42,7 +44,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.fall_button.setScale(1.2, 1.2);
         this.jump_trigger = false;
         this.fall_trigger = false;
-
+        
         scene.player_tween = scene.tweens.add({
             targets: this,
             alpha: 0,
@@ -51,10 +53,17 @@ class Player extends Phaser.GameObjects.Sprite {
             repeat: 2,
             yoyo: true
         });
+        this.lifebar = scene.add.sprite(10, 216 - 70, "lifebar");
+        this.lifebar.setFrame(this.life - 1);
+        this.lifebar.setOrigin(0, 0);
     }
     update(time, delta) {
+        this.scene.children.bringToTop(this.lifebar);
+        if (this.life === 1 && !this.fklow_sound.isPlaying)
+            this.fklow_sound.play();
+        this.lifebar.setFrame(this.life > 0 ? this.life - 1 : 0);
         if (this.body.velocity.y < 0)
-            this.setTexture("player_jump");
+        this.setTexture("player_jump");
         if (this.body.velocity.y > 0 && !this.body.onFloor())
             this.setTexture("player_land");
         if ((this.body.onFloor() || this.body.touching.down) && this.anims.currentAnim.key != "player_run_anim")
@@ -77,5 +86,10 @@ class Player extends Phaser.GameObjects.Sprite {
                     this
             );
         }
+    }
+    isAlive() {
+        if (!this.life)
+            this.fklow_sound.stop();
+        return this.life > 0;
     }
 }

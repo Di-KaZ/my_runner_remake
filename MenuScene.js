@@ -39,6 +39,7 @@ class MenuScene extends Phaser.Scene {
         this.load.spritesheet("player_idle", "ressources/Character/idle.png", {frameWidth: 19, frameHeight: 34});
         this.load.spritesheet("menu_button", "ressources/button_menu.png", {frameWidth: 384, frameHeight: 30});
         this.load.spritesheet("button_dead", "ressources/button_dead.png", {frameWidth: 203, frameHeight: 30});
+        this.load.spritesheet("lifebar", "ressources/life.png", {frameWidth: 80, frameHeight: 60});
         this.load.image("player_land", "ressources/Character/landing.png");
         this.load.image("player_jump", "ressources/Character/jump.png");
         this.load.image("jumper", "ressources/jumper.png");
@@ -46,6 +47,7 @@ class MenuScene extends Phaser.Scene {
         this.load.image("void", "ressources/plateforme1.png");
         this.load.image("lava", "ressources/lava.png");
         this.load.audio("jump", "ressources/jump.ogg");
+        this.load.audio("fklow", "ressources/fkinlow.ogg");
         this.load.audio("hurt", "ressources/damage.ogg");
         this.load.audio("jumper_sound", "ressources/jumper.ogg");
         this.load.image("background", "ressources/bg_base.jpg");
@@ -53,8 +55,9 @@ class MenuScene extends Phaser.Scene {
         this.load.audio("music", "ressources/soundtrack.ogg", {volume: 0.5});
     }
     create() {
-        this.music = this.sound.add("music");
-        this.music.play();
+        // this.music = this.sound.add("music");
+        // if (!this.music.isPlaying)
+        //     this.music.play();
         this.background = this.add.image(0, 0, "background");
         this.background.setOrigin(0, 0);
         this.idle_player = this.add.sprite(400, 216 / 2, "player_idle");
