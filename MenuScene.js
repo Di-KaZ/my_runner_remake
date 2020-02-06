@@ -6,7 +6,7 @@ class MenuScene extends Phaser.Scene {
         var loadingText = this.add.text(379, 211, "Loading (0%)", 15);
         loadingText.setOrigin(1, 1);
         this.load.on('progress', function (value) {
-            loadingText.setText("Loading (" + Math.ceil(value) * 100 + "%)");
+            loadingText.setText("Loading (" + Math.ceil(value * 100) + "%)");
             console.log(value);
         });
         
@@ -34,6 +34,7 @@ class MenuScene extends Phaser.Scene {
         this.load.image("layer-5", "ressources/Parallax/plx-6.png");
         this.load.spritesheet("player", "ressources/Character/run.png", {frameWidth: 21, frameHeight: 33});
         this.load.spritesheet("player_idle", "ressources/Character/idle.png", {frameWidth: 19, frameHeight: 34});
+        this.load.spritesheet("menu_button", "ressources/button_menu.png", {frameWidth: 384, frameHeight: 30});
         this.load.image("player_land", "ressources/Character/landing.png");
         this.load.image("player_jump", "ressources/Character/jump.png");
         this.load.image("jumper", "ressources/jumper.png");
@@ -50,42 +51,40 @@ class MenuScene extends Phaser.Scene {
         this.load.audio("music", "ressources/soundtrack.ogg", {volume: 0.5});
     }
     create() {
+        this.music = this.sound.add("music");
+        // this.music.play();
+        this.background = this.add.image(0, 0, "background");
+        this.background.setOrigin(0, 0);
+        this.idle_player = this.add.sprite(400, 216 / 2, "player_idle");
+        this.idle_player.setScale(6);
+        this.logo_scale_factor = 1;
+        this.logo_scale_mul = -0.01;
+        this.logo = this.add.image(130, 60, "logo");
+        
+        // MENU BUTTONS
+        this.play_button = new Button(-30, 126, "menu_button", "menu_off", "menu_on", () => this.scene.start("GameLoopScene"), this);
+        this.options_button = new Button(-20, 156, "menu_button", "menu_off", "menu_on", () => this.scene.start("OptionsScene"), this);
+        this.credits_button = new Button(0, 186, "menu_button", "menu_off", "menu_on", () => this.scene.start("CreditScene"), this);
+        this.play_button.alpha = 0;
+        this.options_button.alpha = 0;
+        this.credits_button.alpha = 0;
+        this.play_text = this.add.bitmapText(45, 130, "pixelFont", "PLAY", 30);
+        this.play_text.tint = 0x000000;
+        this.options_text = this.add.bitmapText(65, 160, "pixelFont", "OPTIONS", 30);
+        this.options_text.tint = 0x000000;
+        this.credits_text = this.add.bitmapText(95, 190, "pixelFont", "CREDITS", 30);
+        this.credits_text.tint = 0x000000;
+        this.play_text.alpha = 0;
+        this.options_text.alpha = 0;
+        this.credits_text.alpha = 0;
+
+        // ANIMATION
         this.anims.create({
             key: "player_idle_anim",
             frames: this.anims.generateFrameNumbers("player_idle"),
             frameRate: 8,
             repeat: -1
         });
-        this.music = this.sound.add("music");
-        this.menu_on = this.sound.add("menu_on");
-        this.menu_off = this.sound.add("menu_off");
-        // this.music.play();
-        this.background = this.add.image(0, 0, "background");
-        this.background.setOrigin(0, 0);
-        this.idle_player = this.add.sprite(400, 216 / 2, "player_idle");
-        this.idle_player.setScale(6);
-        this.idle_player.play("player_idle_anim");
-        this.play_bg = this.add.sprite(0, 190, "bg_off");
-        this.play_bg.setOrigin(0, 0);
-        this.play_bg.setInteractive();
-        this.logo_scale_factor = 1;
-        this.logo_scale_mul = -0.01;
-        this.logo = this.add.image(130, 70, "logo");
-        this.play_bg.on('pointerover', () => {
-            this.play_bg.setTexture("bg_on");
-            this.menu_on.play();
-            this.play_text.tint = 0x000000;
-        });
-        this.play_bg.on('pointerout', () => {
-            this.play_bg.setTexture("bg_off");
-            this.menu_off.play();
-            this.play_text.tint = 0xD3D3D3;
-        });
-        this.play_bg.on('pointerdown', () => {
-            this.scene.start("GameLoopScene");
-        });
-        this.play_text = this.add.bitmapText(45, 195, "pixelFont", "PLAY", 30);
-        this.play_text.tint = 0xD3D3D3;
         this.logo_tween = this.tweens.add({
             targets: this.logo,
             y: this.logo.y,
@@ -115,6 +114,82 @@ class MenuScene extends Phaser.Scene {
             },
             callbackScope: this
         });
+        this.play_depl = this.tweens.add({
+            targets: this.play_button,
+            delay: 400,
+            x: this.play_button.x + 30,
+            ease: 'Power1',
+            duration: 3000,
+            reapeat: 0,
+            alpha: {
+                getStart: () => 0,
+                getEnd: () => 1
+            },
+            callbackScope: this
+        });
+        this.options_depl = this.tweens.add({
+            targets: this.options_button,
+            delay: 800,
+            x: this.options_button.x + 30,
+            ease: 'Power1',
+            duration: 3000,
+            reapeat: 0,
+            alpha: {
+                getStart: () => 0,
+                getEnd: () => 1
+            },
+            callbackScope: this
+        });
+        this.credits_depl = this.tweens.add({
+            targets: this.credits_button,
+            delay: 1200,
+            x: this.credits_button.x + 30,
+            ease: 'Power1',
+            duration: 3000,
+            reapeat: 0,
+            alpha: {
+                getStart: () => 0,
+                getEnd: () => 1
+            },
+            callbackScope: this
+        });
+        this.play_text_depl = this.tweens.add({
+            targets: this.play_text,
+            delay: 400,
+            ease: 'Power1',
+            duration: 3000,
+            reapeat: 0,
+            alpha: {
+                getStart: () => 0,
+                getEnd: () => 1
+            },
+            callbackScope: this
+        });
+        this.options_text_depl = this.tweens.add({
+            targets: this.options_text,
+            delay: 800,
+            ease: 'Power1',
+            duration: 3000,
+            reapeat: 0,
+            alpha: {
+                getStart: () => 0,
+                getEnd: () => 1
+            },
+            callbackScope: this
+        });
+        this.credits_text_depl = this.tweens.add({
+            targets: this.credits_text,
+            delay: 1200,
+            ease: 'Power1',
+            duration: 3000,
+            reapeat: 0,
+            alpha: {
+                getStart: () => 0,
+                getEnd: () => 1
+            },
+            callbackScope: this
+        });
+        this.idle_player.play("player_idle_anim");
     }
     update(time, delta) {
         this.logo_scale_factor += this.logo_scale_mul;

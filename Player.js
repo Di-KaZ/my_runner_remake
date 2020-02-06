@@ -47,7 +47,7 @@ class Player extends Phaser.GameObjects.Sprite {
             this.body.checkCollision.none = true;
             this.drop_timer = this.scene.time.delayedCall(
                     150,
-                    () => {this.body.checkCollision.none = false;},
+                    () => { this.body.checkCollision.none = false; },
                     [],
                     this
             );
