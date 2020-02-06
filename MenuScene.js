@@ -1,6 +1,6 @@
 class MenuScene extends Phaser.Scene {
     constructor() {
-        super("bootGame");
+        super("MenuScene");
     }
     preload() {
         var loadingText = this.add.text(379, 211, "Loading (0%)", 15);
@@ -26,15 +26,19 @@ class MenuScene extends Phaser.Scene {
         this.load.audio("menu_on", "ressources/menu_on.wav");
         this.load.audio("menu_off", "ressources/menu_off.wav");
         this.load.audio("dead_sound", "ressources/dead.ogg");
+        this.load.image("jump_button", "ressources/jump_button.png");
+        this.load.image("fall_button", "ressources/fall_button.png");
         this.load.image("layer-0", "ressources/Parallax/plx-1.png");
         this.load.image("layer-1", "ressources/Parallax/plx-2.png");
         this.load.image("layer-2", "ressources/Parallax/plx-3.png");
         this.load.image("layer-3", "ressources/Parallax/plx-4.png");
         this.load.image("layer-4", "ressources/Parallax/plx-5.png");
         this.load.image("layer-5", "ressources/Parallax/plx-6.png");
+        this.load.image("blank", "ressources/blank.png");
         this.load.spritesheet("player", "ressources/Character/run.png", {frameWidth: 21, frameHeight: 33});
         this.load.spritesheet("player_idle", "ressources/Character/idle.png", {frameWidth: 19, frameHeight: 34});
         this.load.spritesheet("menu_button", "ressources/button_menu.png", {frameWidth: 384, frameHeight: 30});
+        this.load.spritesheet("button_dead", "ressources/button_dead.png", {frameWidth: 203, frameHeight: 30});
         this.load.image("player_land", "ressources/Character/landing.png");
         this.load.image("player_jump", "ressources/Character/jump.png");
         this.load.image("jumper", "ressources/jumper.png");
@@ -45,8 +49,6 @@ class MenuScene extends Phaser.Scene {
         this.load.audio("hurt", "ressources/damage.ogg");
         this.load.audio("jumper_sound", "ressources/jumper.ogg");
         this.load.image("background", "ressources/bg_base.jpg");
-        this.load.image("bg_on", "ressources/bg_on.png");
-        this.load.image("bg_off", "ressources/bg_off.png");
         this.load.image("logo", "ressources/logo.png");
         this.load.audio("music", "ressources/soundtrack.ogg", {volume: 0.5});
     }

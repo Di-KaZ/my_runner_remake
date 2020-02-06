@@ -18,6 +18,31 @@ class Player extends Phaser.GameObjects.Sprite {
         this.body.checkCollision.up = false;
         this.body.checkCollision.left = false;
         this.body.checkCollision.right = false;
+        this.jump_button = scene.add.sprite(384 - 44, 216 - 20, "jump_button");
+        this.fall_button = scene.add.sprite(384 - 84, 216 - 20, "fall_button");
+        this.fall_button.setInteractive();
+        this.jump_button.setInteractive();
+        this.fall_button.on('pointerdown', () => {
+            this.fall_button.tint = 0x808080;
+            this.fall_trigger = true;
+        });
+        this.fall_button.on('pointerup', () => {
+            this.fall_button.clearTint();
+            this.fall_trigger = false;
+        });
+        this.jump_button.on('pointerdown', () => {
+            this.jump_button.tint = 0x808080;
+            this.jump_trigger = true;
+        });
+        this.jump_button.on('pointerup', () => {
+            this.jump_button.clearTint();
+            this.jump_trigger = false;
+        });
+        this.jump_button.setScale(1.2, 1.2);
+        this.fall_button.setScale(1.2, 1.2);
+        this.jump_trigger = false;
+        this.fall_trigger = false;
+
         scene.player_tween = scene.tweens.add({
             targets: this,
             alpha: 0,
@@ -37,12 +62,12 @@ class Player extends Phaser.GameObjects.Sprite {
         this.movePlayerManager();
     }
     movePlayerManager() {
-        if ((Phaser.Input.Keyboard.JustDown(this.spacebar) || this.cursorKeys.up.isDown || this.pointer.isDown) && (this.body.touching.down || this.body.onFloor())) {
+        if ((Phaser.Input.Keyboard.JustDown(this.spacebar) || this.cursorKeys.up.isDown || this.jump_trigger) && (this.body.touching.down || this.body.onFloor())) {
             this.jump_sound.play();
             this.body.setVelocityY(-250);
             this.help_text.visible = false;
         }
-        if (this.cursorKeys.down.isDown && !this.body.onFloor()) {
+        if ((this.cursorKeys.down.isDown || this.fall_trigger) && !this.body.onFloor()) {
             this.jump_sound.play();
             this.body.checkCollision.none = true;
             this.drop_timer = this.scene.time.delayedCall(
