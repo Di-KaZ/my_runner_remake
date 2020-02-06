@@ -53,9 +53,8 @@ class MenuScene extends Phaser.Scene {
         this.load.audio("music", "ressources/soundtrack.ogg", {volume: 0.5});
     }
     create() {
-        this.scale.toggleFullscreen();
         this.music = this.sound.add("music");
-        // this.music.play();
+        this.music.play();
         this.background = this.add.image(0, 0, "background");
         this.background.setOrigin(0, 0);
         this.idle_player = this.add.sprite(400, 216 / 2, "player_idle");

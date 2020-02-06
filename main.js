@@ -3,7 +3,7 @@ var game_config = {
     width: 384,
     height: 216,
     backgroundColor: 0x000000,
-    scene: [ MenuScene, GameLoopScene, DeadScene ],
+    scene: [ MenuScene, GameLoopScene, DeadScene, OptionsScene ],
     physics: {
         default: "arcade",
         arcade: {
