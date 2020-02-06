@@ -32,7 +32,7 @@ class GameLoopScene extends Phaser.Scene {
         this.jump_sound = this.sound.add("jump");
         this.hurt_sound = this.sound.add("hurt");
         this.jumper_sound = this.sound.add("jumper_sound");
-        this.help_text = this.add.bitmapText(384 / 2, 216 / 1.5, "pixelFont", "PRESS UP/SPACE OR CLICK ANYWHERE TO JUMP", 16);
+        this.help_text = this.add.bitmapText(384 / 2, 216 / 1.5, "pixelFont", "PRESS UP/DOWN OR TOUCH CONTROL", 16);
         this.help_text.setOrigin(0.5, 0.5);
         this.physics.world.checkCollision.up = false;
         // Player
