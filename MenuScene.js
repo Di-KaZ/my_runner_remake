@@ -73,6 +73,7 @@ class MenuScene extends Phaser.Scene {
         this.play_button.alpha = 0;
         this.options_button.alpha = 0;
         this.credits_button.alpha = 0;
+        this.teruuko = this.add.bitmapText(105, 110,"pixelFont", "Alphatester : TerukoProlapse", 20);
         this.play_text = this.add.bitmapText(45, 130, "pixelFont", "PLAY", 30);
         this.play_text.tint = 0x000000;
         this.options_text = this.add.bitmapText(65, 160, "pixelFont", "OPTIONS", 30);
@@ -116,6 +117,18 @@ class MenuScene extends Phaser.Scene {
             alpha: {
                 getStart: () => 0,
                 getEnd: () => 1
+            },
+            callbackScope: this
+        });
+        this.teruuko_twin = this.tweens.add({
+            targets: this.teruuko,
+            x: this.teruuko.x - 100,
+            ease: 'Power1',
+            duration: 3000,
+            reapeat: 0,
+            alpha: {
+                getStart: () => 0,
+                getEnd: () => 0.5
             },
             callbackScope: this
         });
