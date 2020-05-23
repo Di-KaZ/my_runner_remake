@@ -9,7 +9,6 @@ class MenuScene extends Phaser.Scene {
             loadingText.setText("Loading (" + Math.ceil(value * 100) + "%)");
             console.log(value);
         });
-        
         this.load.on('fileprogress', function (file) {
             console.log(file.src);
         });

@@ -99,22 +99,22 @@ class GameLoopScene extends Phaser.Scene {
         return string_num;
     }
     addColumnMap() {
-        if (this.map_y > test_map[0].length)
-            return;
+        // if (this.map_y > test_map[0].length)
+        //     return;
         for (var i = 0; i < tab_align.length; i ++) {
-            last = new MapTile(this, 384, tab_align[i], this.getTileType(test_map[i][this.map_y]));
+            last = new MapTile(this, 384, tab_align[i], this.getTileType(Phaser.Math.Between(0, 100)));
             this.map_grp.add(last);
         }
-        this.map_y += 1;
+        // this.map_y += 1;
     }
-    getTileType(char) {
-        if (char === "0")
+    getTileType(num) {
+        if (0 <= num && num <= 20)
             return "void";
-        if (char === "1")
+        if (51 <= num && num <= 100)
             return "grass";
-        if (char === "2")
+        if (21 <= num && num <= 40)
             return "lava";
-        if (char === "3")
+        if (41 <= num && num <= 50)
             return "jumper";
     }
 }
